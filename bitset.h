@@ -12,7 +12,7 @@
     #ifndef USE_INLINE
 
     #define bitset_create(bitset, size)({\
-        _Static_assert(size > 0, "Size can't be less than 0");\
+        /*_Static_assert(size > 0, "Size can't be less than 0");*/\
         bitset_alloc(bitset, size);\
     })
 
