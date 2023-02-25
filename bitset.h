@@ -9,11 +9,11 @@
 
     #define MAX_COUNT (unsigned long)(CHAR_BIT*sizeof(unsigned long))
 
-    #ifdef USE_INLINE
+    #ifndef USE_INLINE
 
     #define bitset_create(bitset, size)({\
         _Static_assert(size > 0, "Size can't be less than 0");\
-        bitset_alloc(&bitset, size);\
+        bitset_alloc(bitset, size);\
     })
 
     #define bitset_alloc(bitset, size)({\
@@ -48,12 +48,8 @@
 
     #else
     //////////////////////////////////////////////////////////////////////////////////////////
-    inline void bitset_create(bitset_t bitset, unsigned long size){
-        _Static_assert(size > 0, "Size can't be less than 0");
-        bitset_alloc(&bitset, size);
-    }
 
-    inline void bitset_alloc(bitset_t bitset, unsigned long size){
+    static inline void bitset_alloc(bitset_t* bitset, unsigned long size){
         unsigned long bitset_size = (unsigned long)size / MAX_COUNT + 2;
         (*bitset) = (bitset_t)malloc(bitset_size * sizeof(unsigned long));
         (*bitset)[0] = size;
@@ -62,28 +58,33 @@
         }
     }
 
-    inline unsigned long bitset_getbit(bitset_t bitset, unsigned long index){
+    static inline void bitset_create(bitset_t* bitset, unsigned long size){
+        //_Static_assert(size > 0, "Size can't be less than 0");
+        bitset_alloc(bitset, size);
+    }
+
+    static inline unsigned long bitset_getbit(bitset_t bitset, unsigned long index){
         unsigned long simple_index = (unsigned long)index / MAX_COUNT + 1;
         unsigned long bit_index = index % MAX_COUNT;
         unsigned long tmp = bitset[simple_index] & (1UL << bit_index);
         return tmp == 1UL << bit_index ? 1UL : 0UL;
     }
 
-    inline void bitset_setbit(bitset_t bitset, unsigned long index, unsigned long index){
-        unsigned long simple_index = (unsigned long)index / (unsigned long)MAX_COUNT + 1;
+    static inline void bitset_setbit(bitset_t bitset, unsigned long index, unsigned long value){
+        unsigned long simple_index = (unsigned long)index / MAX_COUNT + 1;
         unsigned long bit_index = index % MAX_COUNT;
-        if(value == 0){\\
+        if(value == 0){
             bitset[simple_index] &= 0UL << bit_index;
         }else{
             bitset[simple_index] |= 1UL << bit_index;
         }
     }
 
-    inline unsigned long bitset_size(bitset_t bitset){
+    static inline unsigned long bitset_size(bitset_t bitset){
         return bitset[0];
     }
 
-    inline void bitset_free(bitset_t bitset){
+    static inline void bitset_free(bitset_t bitset){
         free(bitset);
     }
 
