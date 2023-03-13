@@ -2,7 +2,7 @@
     #include <limits.h>
     #include <stdlib.h>
     #include <assert.h>
-    #include "error.c"
+    #include "error.h"
 
 
     typedef unsigned long* bitset_t;
