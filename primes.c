@@ -1,14 +1,20 @@
+// primes.c
+// IJC-DU1 Solution, task a), 19.03.2023
+// Author: Pavlo Butenko, FIT
+// Compiled with: gcc 10.2
+// Getting last 10 primary numbers up to specific number
+
 #include "eratosthenes.c"
-// #include "bitset.h"
 #include <stdio.h>
 #include <assert.h>
 #include <time.h>
 
+#define N 230000000LU
+
 int main(){
     clock_t start = clock();
-    unsigned long N = 230000000LU;
     bitset_t arr;
-    bitset_create(&arr, N + 1);
+    bitset_create(&arr, N);
     arr = eratosthenes(arr);
     int count = 0;
     for(unsigned long i = N; i > 0 && count < 10; i--){

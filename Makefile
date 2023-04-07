@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -std=c11 -Wall -Wextra 
+CFLAGS = -g -std=c11 -pedantic -Wall -Wextra 
 
 all: primes primes-i steg-decode
 	./primes
@@ -10,9 +10,9 @@ run: primes primes-i
 	./primes
 	./primes-i
 
-steg-decode: ppm.o error.o eratosthenes.c bitset.h 
+steg-decode: ppm.o error.o eratosthenes.c steg-decode.c bitset.h
 	$(CC) $(CFLAGS) steg-decode.c -o steg-decode ppm.o error.o -lm
-primes: error.o eratosthenes.c bitset.h
+primes: primes.c error.o eratosthenes.c bitset.h
 	$(CC) $(CFLAGS) primes.c -o primes error.o -lm -O2
 
 primes-i: error.o eratosthenes.c bitset.h

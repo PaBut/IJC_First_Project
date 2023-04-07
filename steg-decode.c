@@ -1,9 +1,15 @@
+// steg-decode.c
+// IJC-DU1 Solution, task b), 19.03.2023
+// Author: Pavlo Butenko, FIT
+// Compiled with: gcc 10.2
+// Decoding ppm image to get decoded message
+
 #include "bitset.h"
 #include <stdio.h>
 #include <assert.h>
-#include <time.h>
 #include "math.h"
 #include "ppm.h"
+#include "error.h"
 #include "eratosthenes.c"
 
 
@@ -11,11 +17,13 @@ int main(int argc, char* argv[]){
     if(argc != 2){
         error_exit("main: Invalid amount of arguments, name of file is not specified");
     }
-    clock_t start = clock();
     struct ppm* image = ppm_read(argv[1]);
+    if(image == NULL){
+        exit(EXIT_FAILURE);
+    }
     unsigned long N = 3 * image->xsize * image->ysize;
     bitset_t arr;
-    bitset_create(&arr, N + 1);
+    bitset_alloc(&arr, N + 1);
     arr = eratosthenes(arr);
     int primary_count = 0;
     
@@ -52,10 +60,17 @@ int main(int argc, char* argv[]){
 
         }
     }
-    printf("\n%s\n", str);
-    
+
     bitset_free(arr);
     ppm_free(image);
-    fprintf(stderr, "Time=%.3g\n", (double)(clock()-start)/CLOCKS_PER_SEC);
+
+    if(c != '\0'){
+        free(str);
+        error_exit("There's no end in the encoded message");
+    }
+
+    printf("%s\n", str);
+    
+    free(str);
     return 0;
 }

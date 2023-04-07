@@ -1,3 +1,9 @@
+// ppm.c
+// IJC-DU1 Solution, task b), 19.03.2023
+// Author: Pavlo Butenko, FIT
+// Compiled with: gcc 10.2
+// Reading from ppm file 
+
 #include "ppm.h"
 #include <stdlib.h>
 #include "error.h"
